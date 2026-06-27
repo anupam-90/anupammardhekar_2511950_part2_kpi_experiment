@@ -43,3 +43,19 @@ If we focus exclusively on the conversion rate, we risk:
 * **"Forced" Conversions:** Implementing aggressive sales tactics that may lead to higher initial signups but result in long-term churn.
 * **Declining Customer Satisfaction:** A high conversion rate might be achieved by misleading users, leading to an increase in support tickets and refund requests.
 * **Cannibalization:** We might convert users who would have purchased anyway, or worse, exhaust a cohort that is not yet ready to pay, damaging brand reputation.
+
+## Task 4: Data Cleaning and Preparation
+
+To ensure the integrity of the experiment analysis, the following data cleaning steps were performed:
+
+1. **Missing Values**: Identified missing values in `days_to_convert`. These were expected as they represent users who have not yet converted to a paid plan. No imputation was performed to avoid biasing conversion metrics.
+2. **Group Counts**: Verified balanced distribution between Control and Treatment groups.
+3. **Duplicate User IDs**: Checked for duplicate `user_id` entries; none were found, ensuring unique user-level tracking.
+4. **Invalid Binary Values**: Validated that all indicator columns (`visited_landing_page`, `started_trial`, etc.) contain only 0 or 1. No invalid values were found.
+5. **Outlier Handling Update**: To ensure the analysis focuses on the quality of revenue generated, we refined the outlier detection method. Instead of applying the Interquartile Range (IQR) to the total user base (which is skewed by non-paying users), we restricted the analysis to the **cohort of converting users** (`revenue_30d > 0`).
+   - **Q1**: ₹404.02
+   - **Q3**: ₹1,178.67
+   - **IQR**: ₹774.65
+   - **Upper Boundary**: ₹2,340.63
+   Any user with a `revenue_30d` exceeding ₹2,340.63 is flagged as an outlier to prevent these values from disproportionately influencing our mean revenue comparisons between groups.
+6. **Segment Distribution**: Analyzed the distribution of `region`, `device_type`, and `traffic_source` across `experiment_group` to ensure no selection bias occurred during the randomization process.
